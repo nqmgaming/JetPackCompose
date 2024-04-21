@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -46,18 +48,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             JetPackComposeTheme {
-                Surface(
-                    modifier = Modifier.background(Color.White),
-                    color = MaterialTheme.colorScheme.background,
-                ) {
-                    Row {
-                        CustomItem(weight = 2f, color = Color.Red)
-                        Spacer(modifier = Modifier.height(8.dp))
-                        CustomItem(weight = 1f)
-                        Spacer(modifier = Modifier.height(8.dp))
-                        CustomItem(weight = 1f, color = Color.Green)
-                    }
-                }
+                BoxExample()
             }
         }
     }
@@ -66,7 +57,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun BoxExample() {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         contentAlignment = Alignment.Center
     ) {
         Box(
@@ -82,8 +75,16 @@ fun BoxExample() {
         Box(
             modifier = Modifier
                 .size(100.dp)
-                .background(Color.Green)
-        )
+                .background(Color.Green),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Hello, World!",
+                style = Typography.bodySmall,
+                modifier = Modifier.padding(8.dp),
+                color = Color.DarkGray
+            )
+        }
     }
 }
 
