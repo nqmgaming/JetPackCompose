@@ -6,14 +6,18 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -46,8 +50,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.background(Color.White),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
+                    Row {
+                        CustomItem(weight = 2f, color = Color.Red)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        CustomItem(weight = 1f)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        CustomItem(weight = 1f, color = Color.Green)
                     }
                 }
             }
@@ -55,23 +63,50 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Composable
+fun BoxExample() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(
+            modifier = Modifier
+                .size(200.dp)
+                .background(Color.Blue)
+        )
+        Box(
+            modifier = Modifier
+                .size(150.dp)
+                .background(Color.Red)
+        )
+        Box(
+            modifier = Modifier
+                .size(100.dp)
+                .background(Color.Green)
+        )
+    }
+}
+
+@Composable
+fun RowScope.CustomItem(weight: Float, color: Color = Color.Gray) {
+    Surface(
+        modifier = Modifier
+            .width(200.dp)
+            .weight(weight)
+            .height(50.dp),
+        color = color
+    ) {
+        Text(
+            text = "Hello, World!",
+            style = Typography.bodySmall
+        )
+    }
+}
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     JetPackComposeTheme {
-        Column(modifier = Modifier.fillMaxSize( )) {
-            Surface(
-                modifier = Modifier
-                    .width(200.dp)
-                    .height(50.dp),
-                color = MaterialTheme.colorScheme.primary
-            ) {
-                Text(
-                    text = "Hello, World!",
-                    style = Typography.bodySmall
-                )
-            }
-        }
+        BoxExample()
     }
 }
