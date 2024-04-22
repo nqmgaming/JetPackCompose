@@ -1,10 +1,13 @@
 package com.example.jetpackcompose
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,8 +23,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -35,9 +40,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.BaselineShift
+import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import com.example.jetpackcompose.ui.theme.JetPackComposeTheme
 import com.example.jetpackcompose.ui.theme.Typography
 
@@ -48,66 +71,55 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             JetPackComposeTheme {
-                BoxExample()
+                Surface(color = MaterialTheme.colorScheme.background) {
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        SuperScriptText(normalText = "Hello", superScriptText = "minh")
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-fun BoxExample() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-        contentAlignment = Alignment.Center
-    ) {
-        Box(
-            modifier = Modifier
-                .size(200.dp)
-                .background(Color.Blue)
-        )
-        Box(
-            modifier = Modifier
-                .size(150.dp)
-                .background(Color.Red)
-        )
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .background(Color.Green),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "Hello, World!",
-                style = Typography.bodySmall,
-                modifier = Modifier.padding(8.dp),
-                color = Color.DarkGray
-            )
+fun SuperScriptText(
+    normalText: String,
+    normalFontSize: TextUnit = MaterialTheme.typography.bodyLarge.fontSize,
+    superScriptText: String,
+    superScriptTextFontSize: TextUnit = MaterialTheme.typography.bodySmall.fontSize
+) {
+    Text(buildAnnotatedString {
+        withStyle(style = SpanStyle(fontSize = normalFontSize)) {
+            append(normalText)
         }
-    }
+        withStyle(
+            style = SpanStyle(
+                fontSize = superScriptTextFontSize,
+                fontWeight = FontWeight.Normal,
+                baselineShift = BaselineShift.Subscript
+            )
+        ) {
+            append(superScriptText)
+        }
+    })
 }
 
-@Composable
-fun RowScope.CustomItem(weight: Float, color: Color = Color.Gray) {
-    Surface(
-        modifier = Modifier
-            .width(200.dp)
-            .weight(weight)
-            .height(50.dp),
-        color = color
-    ) {
-        Text(
-            text = "Hello, World!",
-            style = Typography.bodySmall
-        )
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     JetPackComposeTheme {
-        BoxExample()
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            SuperScriptText(normalText = "Hello", superScriptText = "minh")
+        }
+
     }
 }
