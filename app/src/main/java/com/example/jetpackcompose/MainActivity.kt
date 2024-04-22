@@ -77,35 +77,22 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.fillMaxSize()
                     ) {
-                        SuperScriptText(normalText = "Hello", superScriptText = "minh")
+                        ExpandableCard(
+                            title = "My Title",
+                            description = "Staying fit doesn't need to be expensive; I've found several effective free exercise ways. One of my favorite methods is simply going for a walk or run. It's easy, flexible, and requires no special equipment—perfect for getting my heart rate up and burning calories. \n" +
+                                    "\n" +
+                                    "I also include bodyweight exercises in my routine, like push-ups, squats, and planks. These exercises help me build muscle and improve my fitness without needing any gear. \n" +
+                                    "\n" +
+                                    "Sometimes, I enjoy using free online workout videos. A huge variety is available, making it easy to keep my workouts fresh and exciting. On weekends, I love to go outside for a hike or bike ride, which combines exercise with enjoying the outdoors.\n" +
+                                    "\n" +
+                                    "Lastly, I make sure to integrate physical activity into my daily life by doing household chores and choosing more active options like taking the stairs. By incorporating these activities into my routine, I keep fit without spending a dime.\n" +
+                                    "\n",
+                        )
                     }
                 }
             }
         }
     }
-}
-
-@Composable
-fun SuperScriptText(
-    normalText: String,
-    normalFontSize: TextUnit = MaterialTheme.typography.bodyLarge.fontSize,
-    superScriptText: String,
-    superScriptTextFontSize: TextUnit = MaterialTheme.typography.bodySmall.fontSize
-) {
-    Text(buildAnnotatedString {
-        withStyle(style = SpanStyle(fontSize = normalFontSize)) {
-            append(normalText)
-        }
-        withStyle(
-            style = SpanStyle(
-                fontSize = superScriptTextFontSize,
-                fontWeight = FontWeight.Normal,
-                baselineShift = BaselineShift.Subscript
-            )
-        ) {
-            append(superScriptText)
-        }
-    })
 }
 
 
@@ -118,7 +105,17 @@ fun GreetingPreview() {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
         ) {
-            SuperScriptText(normalText = "Hello", superScriptText = "minh")
+            ExpandableCard(
+                title = "My Title",
+                description = "Staying fit doesn't need to be expensive; I've found several effective free exercise ways. One of my favorite methods is simply going for a walk or run. It's easy, flexible, and requires no special equipment—perfect for getting my heart rate up and burning calories. \n" +
+                        "\n" +
+                        "I also include bodyweight exercises in my routine, like push-ups, squats, and planks. These exercises help me build muscle and improve my fitness without needing any gear. \n" +
+                        "\n" +
+                        "Sometimes, I enjoy using free online workout videos. A huge variety is available, making it easy to keep my workouts fresh and exciting. On weekends, I love to go outside for a hike or bike ride, which combines exercise with enjoying the outdoors.\n" +
+                        "\n" +
+                        "Lastly, I make sure to integrate physical activity into my daily life by doing household chores and choosing more active options like taking the stairs. By incorporating these activities into my routine, I keep fit without spending a dime.\n" +
+                        "\n",
+            )
         }
 
     }
