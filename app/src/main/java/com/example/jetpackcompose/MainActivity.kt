@@ -23,15 +23,28 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -52,6 +65,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -77,17 +92,7 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.fillMaxSize()
                     ) {
-                        ExpandableCard(
-                            title = "My Title",
-                            description = "Staying fit doesn't need to be expensive; I've found several effective free exercise ways. One of my favorite methods is simply going for a walk or run. It's easy, flexible, and requires no special equipment—perfect for getting my heart rate up and burning calories. \n" +
-                                    "\n" +
-                                    "I also include bodyweight exercises in my routine, like push-ups, squats, and planks. These exercises help me build muscle and improve my fitness without needing any gear. \n" +
-                                    "\n" +
-                                    "Sometimes, I enjoy using free online workout videos. A huge variety is available, making it easy to keep my workouts fresh and exciting. On weekends, I love to go outside for a hike or bike ride, which combines exercise with enjoying the outdoors.\n" +
-                                    "\n" +
-                                    "Lastly, I make sure to integrate physical activity into my daily life by doing household chores and choosing more active options like taking the stairs. By incorporating these activities into my routine, I keep fit without spending a dime.\n" +
-                                    "\n",
-                        )
+                        CustomizeTextField()
                     }
                 }
             }
@@ -95,6 +100,46 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Composable
+fun CustomizeTextField() {
+    var text by remember {
+        mutableStateOf("")
+    }
+    TextField(
+        value = text,
+        onValueChange = { newText ->
+            text = newText
+        },
+        label = {
+            Row {
+                Icon(imageVector = Icons.Default.Face , contentDescription = "Face")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Enter your name")
+            }
+        },
+        leadingIcon = {
+           IconButton(onClick = { /*TODO*/ }) {
+               Icon(imageVector = Icons.Filled.Email, contentDescription ="Email" )
+
+           }
+        },
+        trailingIcon = {
+            IconButton(onClick = {
+            }) {
+                Icon(imageVector = Icons.Filled.Done, contentDescription ="Done" )
+            }
+        },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Email,
+        ),
+        keyboardActions = KeyboardActions(
+            onSearch = {
+                Log.d("MainActivity", "onSearch: $text")
+            }
+        ),
+    )
+
+}
 
 @Preview(showBackground = true)
 @Composable
@@ -105,17 +150,7 @@ fun GreetingPreview() {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
         ) {
-            ExpandableCard(
-                title = "My Title",
-                description = "Staying fit doesn't need to be expensive; I've found several effective free exercise ways. One of my favorite methods is simply going for a walk or run. It's easy, flexible, and requires no special equipment—perfect for getting my heart rate up and burning calories. \n" +
-                        "\n" +
-                        "I also include bodyweight exercises in my routine, like push-ups, squats, and planks. These exercises help me build muscle and improve my fitness without needing any gear. \n" +
-                        "\n" +
-                        "Sometimes, I enjoy using free online workout videos. A huge variety is available, making it easy to keep my workouts fresh and exciting. On weekends, I love to go outside for a hike or bike ride, which combines exercise with enjoying the outdoors.\n" +
-                        "\n" +
-                        "Lastly, I make sure to integrate physical activity into my daily life by doing household chores and choosing more active options like taking the stairs. By incorporating these activities into my routine, I keep fit without spending a dime.\n" +
-                        "\n",
-            )
+            CustomizeTextField()
         }
 
     }
