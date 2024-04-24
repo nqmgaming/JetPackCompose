@@ -69,6 +69,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TooltipBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -98,6 +99,8 @@ import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -105,6 +108,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -120,14 +124,55 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             JetPackComposeTheme {
-                ImageCard(
-                    painter = painterResource(R.drawable.background),
-                    contentDescription = "Android Logo",
-                    title = "Spider Man"
-                )
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    var color by remember {
+                        mutableStateOf(Color.Red)
+                    }
+                    ColorBox(
+                        Modifier
+                            .weight(1f)
+                            .fillMaxSize()
+                            .background(color = color)
+                        ,
+                        updateColor = {
+                            color = it
+                            Log.d("Color", it.toString())
+                        }
+                    )
+                    Box(modifier = Modifier
+                        .weight(1f)
+                        .fillMaxSize()
+                        .background(color = color)
+                    )
+                }
             }
         }
     }
+}
+
+@Composable
+fun ColorBox(
+    modifier: Modifier = Modifier,
+    updateColor: (Color) -> Unit = {}
+) {
+    Box(
+        modifier = modifier
+            .size(128.dp)
+            .clickable {
+                updateColor(
+                    Color(
+                        red = (0..255).random() / 255f,
+                        green = (0..255).random() / 255f,
+                        blue = (0..255).random() / 255f,
+                        alpha = (0..255).random() / 255f
+                    )
+                )
+            }
+    )
 }
 
 @Composable
@@ -200,10 +245,6 @@ fun ImageCard(
 @Composable
 fun DefaultPreview() {
     JetPackComposeTheme {
-        ImageCard(
-            painter = painterResource(R.drawable.background),
-            contentDescription = "Android Logo",
-            title = "Android"
-        )
+        ColorBox()
     }
 }
