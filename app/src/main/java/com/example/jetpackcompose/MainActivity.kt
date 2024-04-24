@@ -2,9 +2,11 @@ package com.example.jetpackcompose
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -29,10 +32,16 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonElevation
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
@@ -53,11 +62,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.SpanStyle
@@ -79,79 +91,81 @@ import androidx.compose.ui.unit.sp
 import com.example.jetpackcompose.ui.theme.JetPackComposeTheme
 import com.example.jetpackcompose.ui.theme.Typography
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             JetPackComposeTheme {
-                Surface(color = MaterialTheme.colorScheme.background) {
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        CustomizeTextField()
-                    }
-                }
+                MainScreen()
             }
         }
     }
 }
 
 @Composable
-fun CustomizeTextField() {
-    var text by remember {
-        mutableStateOf("")
+fun MainScreen() {
+    var count by remember {
+        mutableIntStateOf(0)
     }
-    TextField(
-        value = text,
-        onValueChange = { newText ->
-            text = newText
-        },
-        label = {
-            Row {
-                Icon(imageVector = Icons.Default.Face , contentDescription = "Face")
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Enter your name")
-            }
-        },
-        leadingIcon = {
-           IconButton(onClick = { /*TODO*/ }) {
-               Icon(imageVector = Icons.Filled.Email, contentDescription ="Email" )
 
-           }
-        },
-        trailingIcon = {
-            IconButton(onClick = {
-            }) {
-                Icon(imageVector = Icons.Filled.Done, contentDescription ="Done" )
-            }
-        },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Email,
-        ),
-        keyboardActions = KeyboardActions(
-            onSearch = {
-                Log.d("MainActivity", "onSearch: $text")
-            }
-        ),
-    )
+    val increase = {
+        Log.d("MainScreen", "Increase")
+        count++
+    }
 
-}
+    val decrease = {
+        Log.d("MainScreen", "Decrease")
+        count--
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    JetPackComposeTheme {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        Button(
+            onClick = { count.let { count++ } },
+            modifier = Modifier.clip(MaterialTheme.shapes.medium),
+            colors = ButtonDefaults.buttonColors(Color.Red)
         ) {
-            CustomizeTextField()
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Increase")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Increase")
+            }
         }
 
+        Text(text = count.toString(), style = MaterialTheme.typography.bodyMedium)
+
+        Button(
+            onClick = { count.let { if (count > 0) count-- } },
+            colors = ButtonDefaults.buttonColors(Color.Black)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Icon(imageVector = Icons.Default.Done, contentDescription = "Decrease")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Decrease")
+            }
+        }
+
+    }
+}
+
+@Preview
+@Composable
+fun DefaultPreview() {
+    JetPackComposeTheme {
+        MainScreen()
     }
 }
